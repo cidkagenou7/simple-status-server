@@ -60,4 +60,5 @@ body {
 /* Chart */
 .status canvas {
     max-height: 8em;
+    padding-bottom: 0.5em;
 }

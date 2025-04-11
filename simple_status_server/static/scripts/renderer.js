@@ -60,8 +60,9 @@ function _createStatus(charts, id) {
         type: "bar",
         data: chartData,
         options: {
+            responsive: true,
             scales: {
-                y: { beginAtZero: true, min: 0, max: 100, grid: { color: "#555" } },
+                y: { beginAtZero: true, min: 0, max: 100, ticks: { display: false }, grid: { color: "#555" } },
                 x: { display: false, ticks: { color: "#eee" }, grid: { color: "#555" } },
             },
             legend: { display: false },
