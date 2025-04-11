@@ -190,17 +190,26 @@ def main() -> None:
     for status_id, status_config in statuses_dict.items():
         statuses.append(Status(status_id, status_config))
 
+    api_data: dict[str, dict[str, Any]] = {}
+
+    def _update_data() -> None:
+        """Updates data for server and saves database (called from workers)"""
+        for status in statuses:
+            api_data[status.id] = status.get_data_dict()
+        logging.debug(f"Updates API data: {api_data}")
+        database.save()
+
     # Initialize server, database instances and load database
     if api_key:
         logging.warning("API key specified. Make sure server is accessible only via localhost or secured via SSL")
-    server = Server(request_limits, api_key, page_title, page_description, statuses)
+    server = Server(request_limits, api_key, page_title, page_description, api_data)
     database = Database(statuses, database_path)
     database.load()
 
     # Initialize workers
     workers: list[StatusWorker] = []
     for status in statuses:
-        workers.append(StatusWorker(status, database.save))
+        workers.append(StatusWorker(status, _update_data))
 
     # Start workers
     if workers:

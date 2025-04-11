@@ -26,8 +26,6 @@ from flask import Flask, Response, jsonify, render_template, request
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 
-from simple_status_server.status import Status
-
 
 class Server:
     def __init__(
@@ -36,7 +34,7 @@ class Server:
         api_key: str | None,
         page_title: str,
         page_description: str | None,
-        statuses: list[Status],
+        api_data: dict[str, dict[str, Any]],
     ) -> None:
         self._app = Flask(
             __name__,
@@ -54,7 +52,6 @@ class Server:
             storage_uri="memory://",
             strategy="fixed-window",
         )
-        self._statuses = statuses
 
         @self._app.route("/", methods=["GET"])
         def _index() -> Response | str:
@@ -94,12 +91,7 @@ class Server:
                     logging.warning(f"User {request.remote_addr} provided wrong api key: {request_api_key}")
                     return Response(response="Wrong API key provided", status=403)
 
-            # Send data of each status
-            data: dict[str, dict[str, Any]] = {}
-            for status in statuses:
-                data[status.id] = status.get_data_dict()
-            logging.debug(f"Sending data: {data}")
-            return jsonify(data)
+            return jsonify(api_data)
 
     def start(self, host: str, port: int) -> None:
         """Starts Flask server (blocking)
