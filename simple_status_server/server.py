@@ -25,6 +25,7 @@ from typing import Any
 from flask import Flask, Response, jsonify, render_template, request
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+from waitress import serve
 
 
 class Server:
@@ -105,4 +106,4 @@ class Server:
             port (int): server's port
         """
         logging.info(f"Starting server on {host}:{port}")
-        self._app.run(host, port, debug=False, load_dotenv=False)
+        serve(self._app, host=host, port=port)
