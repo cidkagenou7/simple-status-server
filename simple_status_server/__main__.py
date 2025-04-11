@@ -192,11 +192,14 @@ def main() -> None:
 
     api_data: dict[str, dict[str, Any]] = {}
 
-    def _update_data() -> None:
-        """Updates data for server and saves database (called from workers)"""
-        for status in statuses:
-            api_data[status.id] = status.get_data_dict()
-        logging.debug(f"Updates API data: {api_data}")
+    def _update_data(status: Status) -> None:
+        """Updates data for server and saves database (called from workers)
+
+        Args:
+            status (Status): updated status
+        """
+        api_data[status.id] = status.get_data_dict()
+        logging.debug(f"Updated API data for {status.id}: {api_data[status.id]}")
         database.save()
 
     # Initialize server, database instances and load database
@@ -206,6 +209,10 @@ def main() -> None:
     database = Database(statuses, database_path)
     database.load()
 
+    # Pre-load API data
+    for status in statuses:
+        api_data[status.id] = status.get_data_dict()
+
     # Initialize workers
     workers: list[StatusWorker] = []
     for status in statuses:
@@ -213,7 +220,7 @@ def main() -> None:
 
     # Start workers
     if workers:
-        logging.info("Starting worrkers")
+        logging.info("Starting workers")
         for worker in workers:
             worker.start()
     else:

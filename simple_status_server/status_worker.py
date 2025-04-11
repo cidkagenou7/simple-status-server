@@ -30,7 +30,7 @@ from simple_status_server.status import Status, Type
 
 
 class StatusWorker:
-    def __init__(self, status: Status, update_callback: Callable[[], None]) -> None:
+    def __init__(self, status: Status, update_callback: Callable[[Status], None]) -> None:
         self._status = status
         self._update_callback = update_callback
 
@@ -106,7 +106,7 @@ class StatusWorker:
         # Push new status and save into database
         logging.info(f"{self._status.id}: {result}")
         self._status.push_new_status(result)
-        self._update_callback()
+        self._update_callback(self._status)
 
         # Restart timer
         if not self._exit_flag:
