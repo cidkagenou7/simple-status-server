@@ -90,7 +90,7 @@ def _parse_args() -> argparse.Namespace:
         default=CONFIG_PATH_DEFAULT,
         type=str,
         required=False,
-        help=f"path to config file (Default: {CONFIG_PATH_DEFAULT})",
+        help=f"path to config file (CONFIG_PATH env variable, default: {CONFIG_PATH_DEFAULT})",
         metavar="path/to/config.yaml",
     )
     parser.add_argument(
@@ -98,7 +98,7 @@ def _parse_args() -> argparse.Namespace:
         default=None,
         type=str,
         required=False,
-        help=f'server\'s host (Default: {CONFIG_DEFAULT["server"]["host"]})',
+        help=f'server\'s host (HOST env variable, default: {CONFIG_DEFAULT["server"]["host"]})',
         metavar="HOST",
     )
     parser.add_argument(
@@ -106,7 +106,7 @@ def _parse_args() -> argparse.Namespace:
         default=None,
         type=int,
         required=False,
-        help=f'server\'s port (Default: {CONFIG_DEFAULT["server"]["port"]})',
+        help=f'server\'s port (PORT env variable, default: {CONFIG_DEFAULT["server"]["port"]})',
         metavar="PORT",
     )
     parser.add_argument(
@@ -114,7 +114,8 @@ def _parse_args() -> argparse.Namespace:
         default=None,
         type=str,
         required=False,
-        help=f'API key to restrict access to web page and API (Default: {CONFIG_DEFAULT["server"]["api_key"]})',
+        help="API key to restrict access to web page and API "
+        f'(API_KEY env variable, default: {CONFIG_DEFAULT["server"]["api_key"]})',
         metavar="API_KEY",
     )
     parser.add_argument(
@@ -122,7 +123,8 @@ def _parse_args() -> argparse.Namespace:
         default=None,
         type=str,
         required=False,
-        help=f'path to database file that stores collected statuses (Default: {CONFIG_DEFAULT["database_path"]})',
+        help="path to database file that stores collected statuses "
+        f'(DATABASE_PATH env variable, default: {CONFIG_DEFAULT["database_path"]})',
         metavar="path/to/database.json",
     )
     parser.add_argument("-v", "--version", action="version", version=__version__)
