@@ -1,0 +1,16 @@
+[tool.basedpyright]
+typeCheckingMode = "standard"
+
+defineConstant = { DEBUG = false }
+exclude = ["**/__pycache__", ".env", ".venv", "build", "dist", "env", "venv"]
+
+ignore = []
+include = ["simple_status_server"]
+
+reportMissingImports = "error"
+reportMissingTypeStubs = false
+
+enableTypeIgnoreComments = true
+
+pythonPlatform = "Linux"
+pythonVersion = "3.13"

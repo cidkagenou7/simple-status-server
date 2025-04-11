@@ -1,0 +1,152 @@
+# This is example config file! Please edit it and copy into config.yaml
+# NOTE: You can specify path to config.yaml using -c / --config argument or CONFIG_PATH environment variable
+# Read README.md and --help argument for more info
+
+# [optional] Logging config
+logging:
+  # [optional] Logging level. Available options: 'debug', 'info', 'warning', 'error'. Defaults to 'info'
+  #   It's possible to use just first letter ('d' / 'i' / 'w' / 'e')
+  level: info
+
+  # [optional] Logging format. See python's logging docs. Defaults to "[%(asctime)s] [%(levelname).1s] %(message)s"
+  format: "[%(asctime)s] [%(levelname).1s] %(message)s"
+
+  # [optional] Logging date format. See python's logging docs. Defaults to "%Y-%m-%d %H:%M:%S"
+  date_fmt: "%Y-%m-%d %H:%M:%S"
+
+# [optional] Server (flask) config
+server:
+  # [optional] Server host (use 0.0.0.0 to open on all interfaces)
+  #   (Can be overwritten using --host argument or HOST environment variable. Defaults to "127.0.0.1")
+  host: 127.0.0.1
+
+  # [optional] Server's port (Can be overwritten using --port argument or
+  #   PORT environment variable. Defaults to 8080)
+  port: 8080
+
+  # [optional] Server will only accept requests with this key. Users must use http(s)://<ip>/?apiKey=<api_key> URL
+  # NOTE: It's not secure to use this with public server. Use must redirect traffic using SSL (ex. via nginx)
+  # Read README.md for more info
+  # (Can be overwritten using --api-key argument or API_KEY environment variable. Defaults to None)
+  # api_key: 12345678
+
+  # Web page and API request limits per IP. See Flask-limiter docs for more info
+  #   <https://flask-limiter.readthedocs.io/en/stable/configuration.html#ratelimit-string>
+  request_limits:
+    - 5 per minute
+    - 1 per second
+
+# [optional] Web page title and description
+#   Title defaults to "Status", Description defaults to None
+page:
+  title: "Status"
+  description: "Current status of services"
+
+# [optional] Path to JSON database (will keep collected statuses and restore them at start)
+# (Can be overwritten using --database argument or DATABASE_PATH environment variable. Defaults to 'database.json')
+database_path: "database.json"
+
+# [required] Objects to keep track of
+statuses:
+  # [required] ID of status (must be unique)
+  demoStatusConst:
+    # [required] Type of status. Available for now: 'constant', 'service', 'command', 'path', 'url'
+    #   'constant' - will always be ether true or false
+    #   'service' - checks if service is available using "/usr/bin/systemctl is-active --quiet <target>" command
+    #   'command' - checks for command exit code (any non-zero exit code is considered as 'not working' status)
+    #   'path' - checks if path exists using os.path.exists(<target>) function
+    #   'url' - will send GET request and checks if response is 200 and has non-empty body
+    type: constant
+
+    # [required] true/false for 'constant'; name of service for 'service';
+    #   shell command for 'command'; file / directory path for 'path'; URL for 'url'
+    target: true
+
+    # [optional] Timeout for service / command / url.
+    #   If status couldn't be obtained within this time, it is considered false
+    target_timeout: 10s
+
+    # [optional] Checks interval (exs. 10s, 1h30m, 1.5m). Defaults to 5m
+    interval: 5m
+
+    # [optional] How many checks each chart bar will contain. Defaults to 12 (5m * 12 = 1h per bar)
+    #   Also used to calculate current status. See value_problems comment for more info
+    checks_per_bar: 12
+
+    # [optional] Maximum amount of chart bars to keep. Defaults to 50
+    bars_max: 50
+
+    # [optional] Name (title / label) of status. ID will be used if not specified
+    label: "Test constant 1"
+
+    # [optional] Value if status is true (aka OK, working). Defaults to 'Working'
+    value_working: "Working"
+
+    # [optional] Value if at least one status in checks_per_bar is false. Defaults to 'Has problems'
+    #   So if checks_per_bar is 12 and ALL 12 statuses are false, value_not_working will be returned,
+    #       BUT if at least one of them is true, value_problems will be returned (or value_not_working if
+    #       no_intermediate_value is true)
+    #   See current_status() functions docs (in status.py file) for more info
+    value_problems: "Has problems"
+
+    # [optional] Value if status is false (aka NOT OK, not working). Defaults to 'Not working'
+    value_not_working: "Not working"
+
+    # [optional] Set to true to show only value_working / value_not_working (without value_problems)
+    no_intermediate_value: false
+
+  # Service example
+  demoServiceStatus:
+    type: service
+    target: "network.target"
+    interval: 1m
+    checks_per_bar: 10
+    label: "Networking"
+    value_working: "Available"
+    value_problems: "Partially available"
+    value_not_working: "No network"
+
+  # Command example (checks if process exists) (type 'nano test.txt' into console to test this)
+  demoCommandStatus:
+    type: command
+    target: "ps -aux | grep -v grep | grep nano"
+    interval: 5s
+    checks_per_bar: 12
+    label: "nano editor"
+    value_working: "Active"
+    value_problems: "Starting or exiting"
+    value_not_working: "No such process"
+
+  # File checker example
+  demoFileStatus:
+    type: path
+    target: "./test.txt"
+    interval: 1m
+    label: "Demo file (test.txt)"
+    value_working: "Exists"
+    value_not_working: "Not exists"
+    no_intermediate_value: true
+
+  # URL example
+  demoURL:
+    type: url
+    target: "https://example.com/"
+    interval: 10m
+    label: "example.com"
+
+  # URL example 2
+  demoURL2:
+    type: url
+    target: "http://127.0.0.1:8080"
+    label: "Some server example"
+
+  # URL example via proxy
+  demoURLProxy:
+    type: command
+    target: 'http_proxy="http://127.0.0.1:2080" https_proxy="$http_proxy" curl --silent --output /dev/null https://example.com/'
+    label: "Server via proxy example"
+
+  # False status constant example
+  demoFalseConstant:
+    type: constant
+    target: false

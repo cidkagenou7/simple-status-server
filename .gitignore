@@ -1,0 +1,12 @@
+__pycache__
+.env
+.venv
+build
+dist
+env
+venv
+config.yaml
+database.json
+*.old
+*.bak
+test.txt
