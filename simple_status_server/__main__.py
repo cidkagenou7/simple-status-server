@@ -80,7 +80,9 @@ def _parse_args() -> argparse.Namespace:
     Returns:
         argparse.Namespace: parsed arguments
     """
-    parser = argparse.ArgumentParser(description="Simple service / command status web server and API")
+    parser = argparse.ArgumentParser(
+        description="Simple service / command / file / url status web server with logger, graphs and API"
+    )
 
     parser.add_argument(
         "-c",
