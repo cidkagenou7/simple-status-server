@@ -26,7 +26,7 @@ from typing import Callable
 
 import requests
 
-from .status import Status, Type
+from simple_status_server.status import Status, Type
 
 
 class StatusWorker:

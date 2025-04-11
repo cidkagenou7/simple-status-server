@@ -23,7 +23,7 @@ import logging
 from os import path
 from threading import Lock
 
-from .status import Status
+from simple_status_server.status import Status
 
 
 class Database:

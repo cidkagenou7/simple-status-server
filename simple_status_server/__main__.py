@@ -31,11 +31,11 @@ try:
 except ImportError:
     from yaml import Loader
 
-from ._version import __version__
-from .database import Database
-from .server import Server
-from .status import Status
-from .status_worker import StatusWorker
+from simple_status_server._version import __version__
+from simple_status_server.database import Database
+from simple_status_server.server import Server
+from simple_status_server.status import Status
+from simple_status_server.status_worker import StatusWorker
 
 CONFIG_PATH_DEFAULT = environ.get("CONFIG_PATH", "config.yaml")
 
