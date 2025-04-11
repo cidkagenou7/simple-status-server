@@ -36,11 +36,12 @@ server:
     - 5 per minute
     - 1 per second
 
-# [optional] Web page title and description
-#   Title defaults to "Status", Description defaults to None
+# [optional] Web page text values
+#   title defaults to "Status", description defaults to None, last_check_text defaults to "Last check:"
 page:
   title: "Status"
   description: "Current status of services"
+  last_check_text: "Last check:"
 
 # [optional] Path to JSON database (will keep collected statuses and restore them at start)
 # (Can be overwritten using --database argument or DATABASE_PATH environment variable. Defaults to 'database.json')

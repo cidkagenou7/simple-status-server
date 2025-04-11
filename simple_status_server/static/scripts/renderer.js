@@ -47,6 +47,12 @@ function _createStatus(charts, id) {
     status.id = `${id}-status`;
     container.appendChild(status);
 
+    // Append last update time
+    const updateTime = document.createElement("p");
+    updateTime.className = "status-update-time";
+    updateTime.id = `${id}-update-time`;
+    container.appendChild(updateTime);
+
     // Append canvas
     // const canvas_container = document.createElement("div");
     // canvas_container.className = "canvas-container";
@@ -145,6 +151,13 @@ function _parseUpdateData(responseRaw, charts) {
             statusElement.className =
                 statusRaw.status <= 0 ? "not-working" : statusRaw.status == 1 ? "problems" : "working";
         else statusElement.className = "problems";
+
+        // Update time of the last check
+        if (statusRaw.timestamps.length != 0) {
+            const updateTime = document.getElementById(`${statusID}-update-time`);
+            const timeFormatted = _timestampToString(statusRaw.timestamps[statusRaw.timestamps.length - 1][1]);
+            updateTime.innerText = `${LAST_CHECK_TEXT} ${timeFormatted}`;
+        }
 
         // Calculate colors based on value (0-100)
         charts[statusID].data.datasets[0].backgroundColor = [];

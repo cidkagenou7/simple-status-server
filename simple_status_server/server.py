@@ -34,6 +34,7 @@ class Server:
         api_key: str | None,
         page_title: str,
         page_description: str | None,
+        last_check_text: str,
         api_data: dict[str, dict[str, Any]],
     ) -> None:
         self._app = Flask(
@@ -70,6 +71,7 @@ class Server:
                 "index.html",
                 page_title=page_title,
                 page_description=page_description if page_description else "",
+                last_check_text=last_check_text,
             )
 
         @self._app.route("/", methods=["POST"])

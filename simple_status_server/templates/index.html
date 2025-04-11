@@ -14,9 +14,12 @@
         <script src="{{url_for('static', filename='scripts/renderer.js')}}"></script>
 
         <script>
+            const PAGE_UPDATE_INTERVAL = 60000;
+            const LAST_CHECK_TEXT = "{{last_check_text}}";
+
             const charts = {};
             requestAndRender(charts);
-            setInterval(requestAndRender, 60000, charts);
+            setInterval(requestAndRender, PAGE_UPDATE_INTERVAL, charts);
         </script>
     </head>
 
