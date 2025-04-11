@@ -1,3 +1,5 @@
+const MIN_BARS = 48;
+
 /**
  * Converts UTC time into client's time string
  * @param {Number} timestamp time from server
@@ -124,6 +126,11 @@ function _parseUpdateData(responseRaw, charts) {
             charts[statusID].data.labels.push(`${label_start} - ${label_end}`);
         });
         charts[statusID].data.datasets[0].data = statusRaw.data || [];
+
+        // Append empty bars to the start if needed
+        while (charts[statusID].data.labels.length < MIN_BARS) charts[statusID].data.labels.unshift("-");
+        while (charts[statusID].data.datasets[0].data.length < MIN_BARS)
+            charts[statusID].data.datasets[0].data.unshift(0);
 
         // Create new status and chart if not exists
         if (create) _createStatus(charts, statusID);
