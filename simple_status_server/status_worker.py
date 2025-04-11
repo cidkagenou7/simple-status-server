@@ -99,6 +99,12 @@ class StatusWorker:
                 except:
                     pass
 
+        # Catch CTRL+C
+        except (SystemExit, KeyboardInterrupt):
+            logging.warning(f"Received interrupt while updating {self._status.id}")
+            self._exit_flag = True
+            return
+
         # Just in case
         except Exception as e:
             logging.error(f"{self._status.id} error: {e}", exc_info=e)
