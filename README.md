@@ -168,7 +168,7 @@ Below is example config file to secure status server with SSL
 ```nginx
 # /etc/nginx/sites-available/status.conf
 
-upstream ssimple-status-serverimple-status-server {
+upstream simple-status-server {
     server 127.0.0.1:8080;
 }
 
