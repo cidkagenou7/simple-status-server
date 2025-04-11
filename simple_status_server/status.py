@@ -27,7 +27,7 @@ CONFIG_DEFAULT = {
     "target_timeout": "10s",
     "interval": "5m",
     "checks_per_bar": 12,
-    "bars_max": 50,
+    "bars_max": 48,
     "value_working": "Working",
     "value_problems": "Has problems",
     "value_not_working": "Not working",

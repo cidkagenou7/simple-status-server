@@ -73,8 +73,8 @@ statuses:
     #   Also used to calculate current status. See value_problems comment for more info
     checks_per_bar: 12
 
-    # [optional] Maximum amount of chart bars to keep. Defaults to 50
-    bars_max: 50
+    # [optional] Maximum amount of chart bars to keep. Defaults to 48 (5m * 12 * 48 = 2d per entire page)
+    bars_max: 48
 
     # [optional] Name (title / label) of status. ID will be used if not specified
     label: "Test constant 1"
