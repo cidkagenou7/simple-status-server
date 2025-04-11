@@ -66,7 +66,7 @@ statuses:
     #   If status couldn't be obtained within this time, it is considered false
     target_timeout: 10s
 
-    # [optional] Checks interval (exs. 10s, 1h30m, 1.5m). Defaults to 5m
+    # [optional] Checks interval (exs. 10s, 1h30m, 1.5m, 300). Defaults to 5m
     interval: 5m
 
     # [optional] How many checks each chart bar will contain. Defaults to 12 (5m * 12 = 1h per bar)

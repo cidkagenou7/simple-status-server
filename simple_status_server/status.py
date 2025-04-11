@@ -34,36 +34,42 @@ CONFIG_DEFAULT = {
 }
 
 
-def parse_time_str(time_str: str) -> int:
-    """Parses interval string into seconds
-    >>> parse_time_str("1")
+def parse_time_cfg(time_cfg: str | int) -> int:
+    """Parses time config (ex. interval) into seconds
+    >>> parse_time_cfg("1")
     1
-    >>> parse_time_str("1.2")
+    >>> parse_time_cfg("1.2")
     1
-    >>> parse_time_str("1s")
+    >>> parse_time_cfg("1s")
     1
-    >>> parse_time_str("5m")
+    >>> parse_time_cfg("5m")
     300
-    >>> parse_time_str("2h")
+    >>> parse_time_cfg("2h")
     7200
-    >>> parse_time_str("5d")
+    >>> parse_time_cfg("5d")
     432000
-    >>> parse_time_str("1d2h3m1.789s")
+    >>> parse_time_cfg("1d2h3m1.789s")
     93781
-    >>> parse_time_str("1.5m")
+    >>> parse_time_cfg("1.5m")
     90
+    >>> parse_time_cfg(300)
+    300
 
     Args:
-        time_str (str): ex. 5m
+        time_cfg (str | int): ex. 5m
 
     Returns:
         int: parsed time interval in seconds
     """
+    # Already in seconds
+    if isinstance(time_cfg, int):
+        return time_cfg
+
     units = {"s": 1, "m": 60, "h": 3600, "d": 86400}
 
     seconds = 0
     num_str_temp = ""
-    for char in time_str.strip().lower().replace(" ", "").replace(",", "."):
+    for char in time_cfg.strip().lower().replace(" ", "").replace(",", "."):
         if char.isdigit() or char == ".":
             num_str_temp += char
         else:
@@ -159,8 +165,8 @@ class Status:
         self.target: str | bool = config["target"]
 
         self.label = config.get("label", status_id)
-        self.target_timeout = parse_time_str(config.get("target_timeout", CONFIG_DEFAULT["target_timeout"]))
-        self.interval = parse_time_str(config.get("interval", CONFIG_DEFAULT["interval"]))
+        self.target_timeout = parse_time_cfg(config.get("target_timeout", CONFIG_DEFAULT["target_timeout"]))
+        self.interval = parse_time_cfg(config.get("interval", CONFIG_DEFAULT["interval"]))
         self.checks_per_bar = int(config.get("checks_per_bar", CONFIG_DEFAULT["checks_per_bar"]))
         self.bars_max = int(config.get("bars_max", CONFIG_DEFAULT["bars_max"]))
         self.value_working: str = config.get("value_working", CONFIG_DEFAULT["value_working"])
