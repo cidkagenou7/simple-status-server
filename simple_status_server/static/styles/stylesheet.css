@@ -60,6 +60,7 @@ body {
 
 /* Last check time */
 .status-update-time {
+    font-family: monospace;
     font-size: 0.8em;
     color: #777;
     padding: 0;
