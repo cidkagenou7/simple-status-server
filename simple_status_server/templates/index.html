@@ -16,6 +16,13 @@
         <script>
             const PAGE_UPDATE_INTERVAL = 60000;
             const LAST_CHECK_TEXT = "{{last_check_text}}";
+            const EXTRA_CSS = "{{extra_css}}";
+
+            if (EXTRA_CSS) {
+                const styleExtra = document.createElement("style");
+                styleExtra.textContent = EXTRA_CSS;
+                document.head.append(styleExtra);
+            }
 
             const charts = {};
             requestAndRender(charts);
