@@ -47,7 +47,6 @@ class Server:
         self._app.json.sort_keys = False  # pyright: ignore
         self._app.config["JSON_AS_ASCII"] = False
         self._app.json.ensure_ascii = False  # pyright: ignore
-        print(dir(self._app.json))
         self._limiter = Limiter(
             get_remote_address,
             app=self._app,
