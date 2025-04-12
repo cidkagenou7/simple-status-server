@@ -76,8 +76,19 @@ body {
     background-color: hsla(0, 80%, 70%, 0.7);
 }
 
-/* Last check time */
-.status-update-time {
+/* Last check time and uptime container */
+.uptime-container {
+    display: flex;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+/* Last check time and uptime */
+.status-update-time,
+.status-uptime {
     font-family: monospace;
     font-size: 0.9em;
     color: #777;

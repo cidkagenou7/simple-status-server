@@ -65,11 +65,22 @@ function _createStatus(charts, id) {
     status.id = `${id}-status`;
     container.appendChild(status);
 
+    const uptimeContainer = document.createElement("div");
+    uptimeContainer.className = "uptime-container";
+
     // Append last update time
     const updateTime = document.createElement("p");
     updateTime.className = "status-update-time";
     updateTime.id = `${id}-update-time`;
-    container.appendChild(updateTime);
+    uptimeContainer.appendChild(updateTime);
+
+    // Append uptime
+    const uptime = document.createElement("p");
+    uptime.className = "status-uptime";
+    uptime.id = `${id}-uptime`;
+    uptimeContainer.appendChild(uptime);
+
+    container.appendChild(uptimeContainer);
 
     // Append canvas
     // const canvasContainer = document.createElement("div");
@@ -152,6 +163,14 @@ function _parseUpdateData(responseRaw, charts) {
         charts[statusID].data.datasets[0].dataRaw = statusRaw.data || [];
         charts[statusID].data.datasets[0].data = new Array(charts[statusID].data.datasets[0].dataRaw.length).fill(1);
 
+        // Calculate average uptime
+        let uptimeStr = "";
+        if (charts[statusID].data.datasets[0].dataRaw.length > 0) {
+            let total = 0;
+            charts[statusID].data.datasets[0].dataRaw.forEach((value) => (total += value));
+            uptimeStr = (total / charts[statusID].data.datasets[0].dataRaw.length).toFixed(2) + "%";
+        }
+
         // Append empty bars to the start if needed
         while (charts[statusID].data.datasets[0].data.length < statusRaw.bars_max) {
             charts[statusID].data.labels.unshift("");
@@ -179,6 +198,9 @@ function _parseUpdateData(responseRaw, charts) {
             const timeFormatted = _timestampToString(statusRaw.timestamps[statusRaw.timestamps.length - 1][1]);
             updateTime.innerText = `${LAST_CHECK_TEXT} ${timeFormatted}`;
         }
+
+        // Update uptime
+        document.getElementById(`${statusID}-uptime`).innerText = uptimeStr;
 
         // Format palette
         let palette = COLOR_PALETTE;
