@@ -120,6 +120,13 @@ page:
 
 </details>
 
+#### Color palette
+
+> See <https://github.com/timothygebhard/js-colormaps> project for more info
+
+Color of each bar calculated using js-colormaps project.
+You can specify custom palette in `page` -> `color_palette` option. Add "_r" to reverse palette
+
 ----------
 
 ### 3. Start simple-status-server

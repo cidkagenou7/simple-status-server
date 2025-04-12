@@ -38,11 +38,14 @@ server:
 
 # [optional] Web page config
 #   title defaults to "Status", description defaults to None, last_check_text defaults to "Last check:",
+#   color_palette - one of <https://github.com/timothygebhard/js-colormaps/blob/master/images/overview.png>
+#       add "_r" to reverse palette. Defaults to "RdPu"
 #   extra_css - see static/styles/stylesheet.css for reference (Defaults to None)
 page:
   title: "Status"
   description: "Current status of services"
   last_check_text: "Last check:"
+  # color_palette: "RdPu_r"
   # extra_css: ".status { background-color: #f00; }"
 
 # [optional] Path to JSON database (will keep collected statuses and restore them at start)

@@ -74,12 +74,12 @@ function _createStatus(charts, id) {
     container.appendChild(updateTime);
 
     // Append canvas
-    // const canvas_container = document.createElement("div");
-    // canvas_container.className = "canvas-container";
+    // const canvasContainer = document.createElement("div");
+    // canvasContainer.className = "canvas-container";
     const canvas = document.createElement("canvas");
     canvas.id = `${id}-canvas`;
-    // canvas_container.appendChild(canvas);
-    // container.appendChild(canvas_container);
+    // canvasContainer.appendChild(canvas);
+    // container.appendChild(canvasContainer);
     container.appendChild(canvas);
 
     // Create new chart instance
@@ -89,18 +89,11 @@ function _createStatus(charts, id) {
         data: chartData,
         options: {
             responsive: true,
-            scales: {
-                y: { beginAtZero: true, min: 0, max: 100, ticks: { display: false }, grid: { color: "#555" } },
-                x: { display: false, ticks: { color: "#eee" }, grid: { color: "#555" } },
-            },
+            scales: { y: { display: false, stacked: true, min: 0, max: 1 }, x: { display: false, stacked: true } },
             legend: { display: false },
             plugins: {
                 legend: { display: false },
-                tooltip: {
-                    callbacks: {
-                        label: (item) => ` ${item.formattedValue} %`,
-                    },
-                },
+                tooltip: { callbacks: { label: (item) => ` ${item.dataset.dataRaw[item.dataIndex]} %` } },
             },
         },
     });
@@ -145,13 +138,14 @@ function _parseUpdateData(responseRaw, charts) {
 
         // Convert timestamps into labels and update chart data
         charts[statusID].data.labels = [];
-        (statusRaw.timestamps || []).forEach((start_end_time) => {
-            const label_start = _timestampToString(start_end_time[0] || 0);
-            const label_end = _timestampToString(start_end_time[1] || 0);
-            //charts[statusID].data.labels.push([label_start, label_end]);
-            charts[statusID].data.labels.push(`${label_start} - ${label_end}`);
+        (statusRaw.timestamps || []).forEach((startEndTime) => {
+            const labelStart = _timestampToString(startEndTime[0] || 0);
+            const labelEnd = _timestampToString(startEndTime[1] || 0);
+            //charts[statusID].data.labels.push([labelStart, labelEnd]);
+            charts[statusID].data.labels.push(`${labelStart} - ${labelEnd}`);
         });
-        charts[statusID].data.datasets[0].data = statusRaw.data || [];
+        charts[statusID].data.datasets[0].dataRaw = statusRaw.data || [];
+        charts[statusID].data.datasets[0].data = new Array(charts[statusID].data.datasets[0].dataRaw.length).fill(1);
 
         // Append empty bars to the start if needed
         while (charts[statusID].data.labels.length < MIN_BARS) charts[statusID].data.labels.unshift("-");
@@ -179,11 +173,16 @@ function _parseUpdateData(responseRaw, charts) {
             updateTime.innerText = `${LAST_CHECK_TEXT} ${timeFormatted}`;
         }
 
+        // Format palette
+        let palette = COLOR_PALETTE;
+        const paletteReversed = COLOR_PALETTE.endsWith("_r");
+        if (paletteReversed) palette = palette.slice(0, -2);
+
         // Calculate colors based on value (0-100)
         charts[statusID].data.datasets[0].backgroundColor = [];
-        charts[statusID].data.datasets[0].data.forEach((value) => {
-            value = Math.min(Math.max(value, 0), 100);
-            charts[statusID].data.datasets[0].backgroundColor.push(`hsla(${value * 1.2}, 80%, 70%, 0.7)`);
+        charts[statusID].data.datasets[0].dataRaw.forEach((value) => {
+            const rgb = evaluate_cmap(Math.min(Math.max(value, 0), 100) / 100, palette, !paletteReversed);
+            charts[statusID].data.datasets[0].backgroundColor.push(`rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.7)`);
         });
 
         // Refresh chart

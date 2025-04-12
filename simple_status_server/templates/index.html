@@ -10,11 +10,13 @@
 
         <script src="{{url_for('static', filename='scripts/jquery-3.7.1.min.js')}}"></script>
         <script src="{{url_for('static', filename='scripts/chart.js')}}"></script>
+        <script src="{{url_for('static', filename='scripts/js-colormaps.js')}}"></script>
 
         <script src="{{url_for('static', filename='scripts/renderer.js')}}"></script>
 
         <script>
             const PAGE_UPDATE_INTERVAL = 60000;
+            const COLOR_PALETTE = "{{color_palette}}";
             const LAST_CHECK_TEXT = "{{last_check_text}}";
             const EXTRA_CSS = "{{extra_css}}";
 
@@ -31,10 +33,12 @@
     </head>
 
     <body>
-        <div class="page-title-container">
-            <h1 id="page-title">{{page_title}}</h1>
-            <p id="page-description">{{page_description}}</p>
+        <div class="center-container">
+            <div class="page-title-container">
+                <h1 id="page-title">{{page_title}}</h1>
+                <p id="page-description">{{page_description}}</p>
+            </div>
         </div>
-        <div id="statuses"></div>
+        <div class="center-container" id="statuses"></div>
     </body>
 </html>

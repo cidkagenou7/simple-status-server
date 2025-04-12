@@ -52,7 +52,13 @@ CONFIG_DEFAULT = {
         "api_key": environ.get("API_KEY"),
         "request_limits": ["5 per minute", "1 per second"],
     },
-    "page": {"title": "Status", "description": None, "last_check_text": "Last check:", "extra_css": None},
+    "page": {
+        "title": "Status",
+        "description": None,
+        "last_check_text": "Last check:",
+        "color_palette": "RdPu",
+        "extra_css": None,
+    },
     "database_path": environ.get("DATABASE_PATH", "database.json"),
     "statuses": {},
 }
@@ -185,6 +191,7 @@ def main() -> None:
     page_title: str = _get_config(config, "page", "title")
     page_description: str | None = _get_config(config, "page", "description")
     last_check_text: str = _get_config(config, "page", "last_check_text")
+    color_palette: str = _get_config(config, "page", "color_palette")
     extra_css: str | None = _get_config(config, "page", "extra_css")
     database_path: str = args.database if args.database else _get_config(config, "database_path")
 
@@ -209,7 +216,16 @@ def main() -> None:
     # Initialize server, database instances and load database
     if api_key:
         logging.warning("API key specified. Make sure server is accessible only via localhost or secured via SSL")
-    server = Server(request_limits, api_key, page_title, page_description, last_check_text, extra_css, api_data)
+    server = Server(
+        request_limits,
+        api_key,
+        page_title,
+        page_description,
+        last_check_text,
+        color_palette,
+        extra_css,
+        api_data,
+    )
     database = Database(statuses, database_path)
     database.load()
 

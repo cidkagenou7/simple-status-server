@@ -7,9 +7,21 @@ body {
     color: #eee;
 }
 
+/* Containers to center elements inside */
+.center-container {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
 /* Page title and description */
 .page-title-container {
-    margin-left: 0.2em;
+    width: 90%;
+    max-width: 60em;
 }
 .page-title-container h1 {
     font-family: sans-serif;
@@ -31,7 +43,9 @@ body {
     margin: 0.3em 0;
     padding: 0 0.8em;
     border: none;
-    border-radius: 1em;
+    border-radius: 0.6em;
+    width: 90%;
+    max-width: 60em;
 }
 
 /* Status title */
@@ -65,7 +79,7 @@ body {
 /* Last check time */
 .status-update-time {
     font-family: monospace;
-    font-size: 0.8em;
+    font-size: 0.9em;
     color: #777;
     padding: 0;
     margin: 0.6em 0;
@@ -73,6 +87,6 @@ body {
 
 /* Chart */
 .status canvas {
-    max-height: 8em;
+    max-height: 4em;
     margin-bottom: 0.5em;
 }

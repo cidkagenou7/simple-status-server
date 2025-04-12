@@ -36,6 +36,7 @@ class Server:
         page_title: str,
         page_description: str | None,
         last_check_text: str,
+        color_palette: str,
         extra_css: str | None,
         api_data: dict[str, dict[str, Any]],
     ) -> None:
@@ -74,6 +75,7 @@ class Server:
                 page_title=page_title,
                 page_description=page_description if page_description else "",
                 last_check_text=last_check_text,
+                color_palette=color_palette,
                 extra_css=extra_css if extra_css else "",
             )
 
