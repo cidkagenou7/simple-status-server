@@ -148,9 +148,11 @@ function _parseUpdateData(responseRaw, charts) {
         charts[statusID].data.datasets[0].data = new Array(charts[statusID].data.datasets[0].dataRaw.length).fill(1);
 
         // Append empty bars to the start if needed
-        while (charts[statusID].data.labels.length < MIN_BARS) charts[statusID].data.labels.unshift("-");
-        while (charts[statusID].data.datasets[0].data.length < MIN_BARS)
+        while (charts[statusID].data.datasets[0].data.length < MIN_BARS) {
+            charts[statusID].data.labels.unshift("-");
+            charts[statusID].data.datasets[0].dataRaw.unshift(0);
             charts[statusID].data.datasets[0].data.unshift(0);
+        }
 
         // Create new status and chart if not exists
         if (create) _createStatus(charts, statusID);
