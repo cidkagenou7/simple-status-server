@@ -127,6 +127,11 @@ page:
 Color of each bar calculated using js-colormaps project.
 You can specify custom palette in `page` -> `color_palette` option. Add "_r" to reverse palette
 
+<details>
+<summary>Available palettes (Click to expand)</summary>
+<img src="https://github.com/timothygebhard/js-colormaps/blob/master/images/overview.png?raw=true"/>
+</details>
+
 ----------
 
 ### 3. Start simple-status-server
@@ -237,6 +242,19 @@ Group=yourusername
 WantedBy=multi-user.target
 
 ```
+
+----------
+
+## ℹ️ Dependencies
+
+- **Flask** (*BSD license*): <https://github.com/pallets/flask/>
+- **Flask-limiter** (*MIT license*): <https://github.com/alisaifee/flask-limiter>
+- **PyYAML** (*MIT license)*: <https://github.com/yaml/pyyaml>
+- **requests** (*Apache Software license*): <https://github.com/psf/requests>
+- **waitress** (*Zope Public license*): <https://github.com/Pylons/waitress>
+- **Chart.js** (*MIT license*): <https://github.com/chartjs/Chart.js>
+- **jQuery** (*MIT license*): <https://github.com/jquery/jquery>
+- **js-colormaps** (*MIT license*): <https://github.com/timothygebhard/js-colormaps>
 
 ----------
 
