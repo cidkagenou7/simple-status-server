@@ -168,7 +168,7 @@ function _parseUpdateData(responseRaw, charts) {
         if (charts[statusID].data.datasets[0].dataRaw.length > 0) {
             let total = 0;
             charts[statusID].data.datasets[0].dataRaw.forEach((value) => (total += value));
-            uptimeStr = (total / charts[statusID].data.datasets[0].dataRaw.length).toFixed(2) + "%";
+            uptimeStr = (total / charts[statusID].data.datasets[0].dataRaw.length).toFixed(1) + "%";
         }
 
         // Append empty bars to the start if needed
