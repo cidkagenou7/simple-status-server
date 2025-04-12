@@ -228,6 +228,7 @@ class Status:
             "status": self.current_status.value,
             "status_text": self.current_status_text,
             "label": self.label,
+            "bars_max": self.bars_max,
             "timestamps": timestamps,
             "data": data,
         }

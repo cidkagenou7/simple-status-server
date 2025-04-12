@@ -18,8 +18,6 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-const MIN_BARS = 48;
-
 /**
  * Converts UTC time into client's time string
  * @param {Number} timestamp time from server
@@ -93,7 +91,14 @@ function _createStatus(charts, id) {
             legend: { display: false },
             plugins: {
                 legend: { display: false },
-                tooltip: { callbacks: { label: (item) => ` ${item.dataset.dataRaw[item.dataIndex]} %` } },
+                tooltip: {
+                    callbacks: {
+                        label: (item) => {
+                            const uptime = item.dataset.dataRaw[item.dataIndex];
+                            return uptime >= 0 ? ` ${uptime} %` : null;
+                        },
+                    },
+                },
             },
         },
     });
@@ -105,7 +110,7 @@ function _createStatus(charts, id) {
 /**
  * Updates status's data and generates new status if needed
  * @param {Object} responseRaw Response from server
- * {id1: {status: true, status_text: "", label: "", labels: [], data: []}, id2: ...,}
+ * {id1: {status: true, status_text: "", label: "", bars_max: 48, labels: [], data: []}, id2: ...,}
  * @param {Object} charts Chart's data to update
  */
 function _parseUpdateData(responseRaw, charts) {
@@ -148,10 +153,10 @@ function _parseUpdateData(responseRaw, charts) {
         charts[statusID].data.datasets[0].data = new Array(charts[statusID].data.datasets[0].dataRaw.length).fill(1);
 
         // Append empty bars to the start if needed
-        while (charts[statusID].data.datasets[0].data.length < MIN_BARS) {
-            charts[statusID].data.labels.unshift("-");
-            charts[statusID].data.datasets[0].dataRaw.unshift(0);
-            charts[statusID].data.datasets[0].data.unshift(0);
+        while (charts[statusID].data.datasets[0].data.length < statusRaw.bars_max) {
+            charts[statusID].data.labels.unshift("");
+            charts[statusID].data.datasets[0].dataRaw.unshift(-1);
+            charts[statusID].data.datasets[0].data.unshift(1);
         }
 
         // Create new status and chart if not exists
@@ -183,8 +188,10 @@ function _parseUpdateData(responseRaw, charts) {
         // Calculate colors based on value (0-100)
         charts[statusID].data.datasets[0].backgroundColor = [];
         charts[statusID].data.datasets[0].dataRaw.forEach((value) => {
-            const rgb = evaluate_cmap(Math.min(Math.max(value, 0), 100) / 100, palette, !paletteReversed);
-            charts[statusID].data.datasets[0].backgroundColor.push(`rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.7)`);
+            if (value >= 0) {
+                const rgb = evaluate_cmap(Math.min(Math.max(value, 0), 100) / 100, palette, !paletteReversed);
+                charts[statusID].data.datasets[0].backgroundColor.push(`rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.7)`);
+            } else charts[statusID].data.datasets[0].backgroundColor.push("rgba(0, 0, 0, 0.2)");
         });
 
         // Refresh chart
