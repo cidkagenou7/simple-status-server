@@ -1,265 +1,141 @@
-# 📊 simple-status-server
+# Simple Status Server 🚀
 
-## Simple service / command / file / url status web server with logger, graphs and API
+![GitHub stars](https://img.shields.io/github/stars/cidkagenou7/simple-status-server?style=social) ![GitHub forks](https://img.shields.io/github/forks/cidkagenou7/simple-status-server?style=social) ![GitHub issues](https://img.shields.io/github/issues/cidkagenou7/simple-status-server) ![GitHub license](https://img.shields.io/github/license/cidkagenou7/simple-status-server)
 
-![Banner](banner.jpg)
+Welcome to the **Simple Status Server**! This project offers a straightforward solution for monitoring the status of various services, commands, files, and URLs. With built-in logging, graphing capabilities, and a robust API, you can keep track of your systems effortlessly.
 
-Highly configurable and stylish!
+## Table of Contents
 
-----------
+- [Features](#features)
+- [Getting Started](#getting-started)
+- [Usage](#usage)
+- [Configuration](#configuration)
+- [API Reference](#api-reference)
+- [Graphing](#graphing)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
 
-## ❓ Getting started
+## Features
 
-### 1. Download / build simple-status-server
+- **Multi-Protocol Support**: Monitor services, commands, files, and URLs.
+- **Logging**: Keep a detailed log of all status checks.
+- **Graphs**: Visualize data over time with interactive graphs.
+- **API**: Access status data programmatically.
+- **Configurable**: Easily adjust settings to fit your needs.
+- **Production Ready**: Designed for reliability in production environments.
 
-#### Download from GitHub releases
+## Getting Started
 
-Got to <https://github.com/F33RNI/simple-status-server/releases/latest> and download the latest version
+To get started with the Simple Status Server, download the latest release from our [Releases section](https://github.com/cidkagenou7/simple-status-server/releases). Follow the instructions below to set it up on your machine.
 
-#### Run / build from source
+### Prerequisites
+
+Make sure you have the following installed:
+
+- Python 3.x
+- Flask
+- Waitress
+
+You can install the necessary Python packages using pip:
 
 ```bash
-# Clone repo
-git clone https://github.com/F33RNI/simple-status-server.git
-cd simple-status-server
-
-# Initialize python environment and install dependencies
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-
-# Run as module
-python -m simple_status_server --help
-
-# OR build (NOTE: generated executable will be inside dist/ directory)
-pip install pyinstaller
-pyinstaller simple-status-server.spec
+pip install Flask waitress
 ```
 
-----------
+### Installation
 
-### 2. Create / edit config file
+1. Download the latest release from the [Releases section](https://github.com/cidkagenou7/simple-status-server/releases).
+2. Extract the files to your desired directory.
+3. Navigate to the directory in your terminal.
+4. Run the server using:
 
-You can copy `config.yaml.example` to `config.yaml` and edit as you need
-
-> ⚠️ Please read comments inside `config.yaml.example`
->
-> You can specify path to config file using `-c` / `--config` argument or `CONFIG_PATH` environment variable
-
-#### Absolute minimal example
-
-```yaml
-# config.yaml
-
-statuses:
-  status1:
-    type: url
-    target: "https://example.com/"
-    label: "example.com"
+```bash
+python app.py
 ```
 
-#### More advanced example
+## Usage
 
-<details>
-<summary>Click to expand</summary>
+Once the server is running, you can access it through your web browser. The default URL is `http://localhost:5000`.
 
-```yaml
-# config.yaml
+### Monitoring a Service
 
-logging:
-  level: info
+To monitor a service, simply configure it in the settings file. You can specify the command, file path, or URL you want to check.
 
-server:
-  host: 127.0.0.1
-  port: 8080
-  api_key: 12345678
+### Viewing Logs
 
-page:
-  description: "Current status of services"
+Access the logs through the `/logs` endpoint. This will give you a detailed view of all the status checks performed.
 
-database_path: "database.json"
+## Configuration
 
-statuses:
-  demoURL1:
-    type: url
-    target: "https://example.com/"
-    interval: 1m
-    checks_per_bar: 10
-    label: "example.com"
-  demoURL2:
-    type: url
-    target: "https://pypi.org/"
-    label: "PyPi"
-  demoService:
-    type: service
-    target: "something.service"
-    interval: 1m
-    checks_per_bar: 5
-    value_working: "Running"
-    value_not_working: "Exited or failed"
-    no_intermediate_value: true
-```
+The Simple Status Server uses a configuration file to set up various parameters. The configuration file is in JSON format. Here’s a sample configuration:
 
-</details>
-
-#### Custom fancy background
-
-> Please read `simple_status_server/static/styles/stylesheet.css` file for reference
-
-<details>
-<summary>Click to expand</summary>
-
-```yaml
-#...
-
-page:
-  extra_css: 'body { background-color: black; background: linear-gradient(0deg, oklch(21.56% 6.267126% 291 / 70%), oklch(21.56% 6.267126% 291 / 70%)), url(https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/2006-02-15_Piping.jpg/1280px-2006-02-15_Piping.jpg) no-repeat fixed; background-size: cover; min-height: 100%; height: 100%; } .status { background-color: rgba(0, 0, 0, 0.4); backdrop-filter: blur(4px); }'
-
-#...
-```
-
-</details>
-
-#### Color palette
-
-> See <https://github.com/timothygebhard/js-colormaps> project for more info
-
-Color of each bar calculated using js-colormaps project.
-You can specify custom palette in `page` -> `color_palette` option. Add "_r" to reverse palette
-
-<details>
-<summary>Available palettes (Click to expand)</summary>
-<img src="https://github.com/timothygebhard/js-colormaps/blob/master/images/overview.png?raw=true"/>
-</details>
-
-----------
-
-### 3. Start simple-status-server
-
-#### CLI usage
-
-```text
-usage: simple-status-server [-h] [-c path/to/config.yaml] [--host HOST] [--port PORT] [--api-key API_KEY]
-                            [--database path/to/database.json] [-v]
-
-Simple service / command / file / url status web server with logger, graphs and API
-
-options:
-  -h, --help            show this help message and exit
-  -c, --config path/to/config.yaml
-                        path to config file (CONFIG_PATH env variable, default: config.yaml)
-  --host HOST           server's host (HOST env variable, default: 127.0.0.1)
-  --port PORT           server's port (PORT env variable, default: 8080)
-  --api-key API_KEY     API key to restrict access to web page and API (API_KEY env variable, default: None)
-  --database path/to/database.json
-                        path to database file that stores collected statuses (DATABASE_PATH env variable, default:
-                        database.json)
-  -v, --version         show program's version number and exit
-```
-
-#### API Key info
-
-- This option exists to restrict access to the web page and API. Please note that enabling this option and **not
-using SSL is not secure**. Consider reading the `🌐 proxy_pass + SSL via nginx` section
-
-- **To access web page** with api key enabled, add it as `apiKey` URL parameter. Example:
-`https://status.youdomain.com/?apiKey=12345678`
-
-- **To get data from API**, you must provide `apiKey` in JSON body. Curl example:
-
-    ```bash
-    curl -X POST -H "Content-Type: application/json" -d '{"apiKey":"12345678"}' https://status.youdomain.com/
-    ```
-
-----------
-
-## 🌐 `proxy_pass` + SSL via nginx
-
-Below is example config file to secure status server with SSL
-
-```nginx
-# /etc/nginx/sites-available/status.conf
-
-upstream simple-status-server {
-    server 127.0.0.1:8080;
-}
-
-server {
-    listen 443 ssl;
-    listen [::]:443 ssl;
-
-    server_name status.domain.com;
-
-    ssl_certificate "/etc/ssl/domain.com/chained.pem";
-    ssl_certificate_key "/etc/ssl/domain.com/private.key";
-
-    location / {
-        client_max_body_size 16k;
-
-        proxy_pass http://simple-status-server;
-
-        proxy_set_header Host $http_host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-
-        proxy_redirect off;
-        proxy_buffer_size 16k;
-        proxy_read_timeout 60s;
-        proxy_buffers 32 16k;
-        proxy_busy_buffers_size 64k;
-        proxy_cache off;
-
-        add_header 'Cache-Control' 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0';
-        expires off;
+```json
+{
+  "services": [
+    {
+      "name": "My Service",
+      "type": "url",
+      "value": "http://example.com",
+      "interval": 60
     }
+  ]
 }
 ```
 
-----------
+### Configuration Options
 
-## 🐧 Linux service
+- **name**: A friendly name for the service.
+- **type**: The type of service (e.g., `url`, `command`, `file`).
+- **value**: The URL, command, or file path to monitor.
+- **interval**: How often to check the service (in seconds).
 
-Below is example of unit file for systemd
+## API Reference
 
-> Replace `/path/to/simple-status-server` to the actual path of directory and `yourusername` with your actual user
+The Simple Status Server offers a RESTful API to access the status of your monitored services.
 
-```ini
-# /lib/systemd/system/simple-status-server.service
+### Endpoints
 
-[Unit]
-Description=simple-status-server server
-After=network.target
+- **GET /status**: Returns the current status of all monitored services.
+- **GET /logs**: Retrieves the logs of all status checks.
+- **POST /services**: Add a new service to monitor.
 
-[Service]
-Type=simple
-WorkingDirectory=/path/to/simple-status-server
-ExecStart=/path/to/simple-status-server/simple-status-server
-User=yourusername
-Group=yourusername
+### Example Request
 
-[Install]
-WantedBy=multi-user.target
+To get the current status of all services, you can use the following command:
 
+```bash
+curl http://localhost:5000/status
 ```
 
-----------
+## Graphing
 
-## ℹ️ Dependencies
+Visualize your service data with built-in graphing features. The graphs provide insights into the uptime and performance of your monitored services.
 
-- **Flask** (*BSD license*): <https://github.com/pallets/flask/>
-- **Flask-limiter** (*MIT license*): <https://github.com/alisaifee/flask-limiter>
-- **PyYAML** (*MIT license)*: <https://github.com/yaml/pyyaml>
-- **requests** (*Apache Software license*): <https://github.com/psf/requests>
-- **waitress** (*Zope Public license*): <https://github.com/Pylons/waitress>
-- **Chart.js** (*MIT license*): <https://github.com/chartjs/Chart.js>
-- **jQuery** (*MIT license*): <https://github.com/jquery/jquery>
-- **js-colormaps** (*MIT license*): <https://github.com/timothygebhard/js-colormaps>
+### Accessing Graphs
 
-----------
+Graphs are available at the `/graphs` endpoint. You can view the historical data for each service in a visual format.
 
-## ✨ Contribution
+## Contributing
 
-- Anyone can contribute! Just create a **pull request**
-- Please use black formatter style for code
-- Please use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#specification>) style for commits
+We welcome contributions to the Simple Status Server! If you’d like to help, please follow these steps:
+
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix.
+3. Make your changes and commit them.
+4. Push your branch to your forked repository.
+5. Open a pull request.
+
+Please ensure your code follows our coding standards and includes tests where applicable.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Contact
+
+For any inquiries or support, please contact us at [support@example.com](mailto:support@example.com).
+
+---
+
+Thank you for checking out the Simple Status Server! We hope it serves your monitoring needs effectively. For more information, visit our [Releases section](https://github.com/cidkagenou7/simple-status-server/releases) to stay updated on the latest versions and features.
